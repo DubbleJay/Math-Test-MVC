@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      prefHeight="400.0" prefWidth="600.0" alignment="CENTER" spacing="15" stylesheets="@Styling.css"
+      fx:controller="com.doublej.mathtestmvc.EndOfGameController">
+
+    <Text fx:id="gameOverText" text="End of Game"/>
+    <ListView fx:id="gameSummaryListView" maxWidth="520" maxHeight="350"/>
+    <Label fx:id="questionTotalLabel" text="Total Questions: "/>
+    <Label fx:id="correctLabel" text="Correct: "/>
+    <Label fx:id="wrongLabel" text="Wrong: "/>
+    <Label fx:id="finalScoreLabel" text="Final Score: "/>
+    <Button fx:id="backToMainMenuButton" text="Back To Main Menu" onAction="#backToMainMenu"/>
+
+</VBox>

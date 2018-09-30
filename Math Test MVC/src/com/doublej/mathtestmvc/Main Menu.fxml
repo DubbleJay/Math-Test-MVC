@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.doublej.mathtestmvc.MainMenuController"
+      prefHeight="400.0" prefWidth="750.0" alignment="CENTER" spacing="8" stylesheets="@MainMenuStyling.css">
+
+    <fx:define>
+        <Font fx:id="FONT" size="25" name="Arial Black"/>
+    </fx:define>
+
+    <Label alignment="CENTER" text="Math Quiz" textFill="crimson" font="$FONT"/>
+
+    <Separator maxWidth="500" />
+
+    <HBox alignment="CENTER" spacing="8">
+
+        <Label text="Select Number of Questions: "/>
+        <ComboBox fx:id="numberOfQuestionsComboBox"/>
+    </HBox>
+
+    <Label text="Choose Game Type:" font="$FONT">
+        <font>
+            <Font size="12.0" />
+        </font>
+    </Label>
+
+    <Button fx:id="additionModeButton" text="Addition" font="$FONT" onAction="#startGame"/>
+    <Button fx:id="subtractionModeButton" text="Subtraction" font="$FONT" onAction="#startGame"/>
+    <Button fx:id="multiplicationModeButton"  text="Mulitiplication" font="$FONT" onAction="#startGame"/>
+    <Button fx:id="divisionModeButton" text="Division" font="$FONT" onAction="#startGame"/>
+
+</VBox>
