@@ -1,6 +1,5 @@
 package com.doublej.mathtestmvc;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,34 +40,13 @@ public class Controller  {
     @FXML
     Label questionTotalLabel;
 
-
-
-    int solution;
-
-    Model model;
-    String operator;
-    AudioClip rightAnswerAudioClip = new AudioClip(this.getClass().getResource("CorrectAnswer.mp3").toString());
-    AudioClip wrongAnswerAudioClip = new AudioClip(this.getClass().getResource("WrongAnswer.mp3").toString());
-    private int numberOfQuestions;
-    private int questionIndex =  1;
+    private Model model;
+    private AudioClip rightAnswerAudioClip = new AudioClip(this.getClass().getResource("CorrectAnswer.mp3").toString());
+    private AudioClip wrongAnswerAudioClip = new AudioClip(this.getClass().getResource("WrongAnswer.mp3").toString());
 
     public void setModel (int gameType, int numberOfQuestions) {
         model = new Model(gameType, numberOfQuestions);
-        this.numberOfQuestions = numberOfQuestions;
-        switch (gameType) {
-            case 0:
-                operator = "+";
-                break;
-            case 1:
-                operator = "-";
-                break;
-            case 2:
-                operator = "X";
-                break;
-            case 3:
-                operator = "/";
-                break;
-        }
+
         setUpNextQuestion();
         answerTextField.requestFocus();
         answerTextField.setOnKeyPressed(event -> {
@@ -87,18 +65,17 @@ public class Controller  {
     }
 
     public void setUpNextQuestion () {
-        if(numberOfQuestions > 0) {
+        if(!model.isGameOver()) {
             enterButton.setDisable(false);
             nextButton.setDisable(true);
             answerTextField.setDisable(false);
-            int[] numbers = model.generateQuestion();
-            solution = numbers[2];
-            questionText.setText("What is " + numbers[0] + " " + operator + " " + numbers[1] + "?");
+            model.generateCurrentQuestion();
+            questionText.setText(model.getQuestionString());
             outputText.setText("");
             answerTextField.setText("");
             solutionText.setText("");
             answerTextField.requestFocus();
-            questionIndexLabel.setText("Question " + questionIndex);
+            questionIndexLabel.setText("Question " + (model.getQuestionIndex() + 1));
         }
 
         else {
@@ -109,7 +86,8 @@ public class Controller  {
                 Parent endOfGameSceneParent = loader.load();
 
                 EndOfGameController endOfGameController = loader.getController();
-                endOfGameController.setValues(model.correctAnswers, model.wrongAnswers, model.numberOfQuestions, model.getUserScore(), model.summary);
+                endOfGameController.setValues(model.getCorrectAnswers(), model.getWrongAnswers(), model.getNumberOfQuestions(),
+                        (int)model.getUserScore(), model.getSummary());
 
                 Stage window = (Stage) (nextButton.getScene().getWindow());
                 Scene endOfGameScene = new Scene(endOfGameSceneParent, window.getWidth(), window.getHeight());
@@ -124,12 +102,12 @@ public class Controller  {
     public void checkUserAnswer () {
         try {
 
-            boolean correct = model.checkAnswer(solution, Integer.parseInt(answerTextField.getText().trim()), questionText.getText());
+            boolean correct = model.checkUserAnswer(Integer.parseInt(answerTextField.getText().trim()));
             errorLabel.setVisible(false);
 
             if (correct) {
                 solutionText.setFill(Color.FORESTGREEN);
-                solutionText.setText(" = " + String.valueOf(solution));
+                solutionText.setText(" = " + String.valueOf(answerTextField.getText()));
                 outputText.setFill(Color.FORESTGREEN);
                 rightAnswerAudioClip.play();
             } else {
@@ -144,8 +122,6 @@ public class Controller  {
             nextButton.requestFocus();
             String result = correct ? "Correct!" : "Wrong";
             outputText.setText(result);
-            numberOfQuestions--;
-            questionIndex++;
 
         } catch (NumberFormatException nNFE) {
             errorLabel.setVisible(true);
@@ -157,5 +133,4 @@ public class Controller  {
         Parent mainMenuSceneParent = FXMLLoader.load(getClass().getResource("Main Menu.fxml"));
         window.setScene(new Scene(mainMenuSceneParent, window.getWidth(), window.getHeight()));
     }
-
 }
